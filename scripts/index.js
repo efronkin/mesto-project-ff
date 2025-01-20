@@ -1,6 +1,6 @@
 const container = document.querySelector('.content')
 const placesList = container.querySelector('.places__list');
-const addButton = container.querySelector('.profile__add-button');
+//const addButton = container.querySelector('.profile__add-button');
 //const newCardPopup = document.querySelector('.popup_type_new-card');
 //const createButton = newCardPopup.querySelector('.popup__button');
 //const closePopupButton = document.querySelectorAll('.popup__close');
@@ -36,7 +36,6 @@ function createCard(cardTitleValue, cardImageLinkValue) {
 
   deleteButton.addEventListener("click", () => deleteCard(cardElement));
 
-  //likeCard(cardElement);
   likeButton.addEventListener("click", () => likeCard(likeButton));
 
   return cardElement;
