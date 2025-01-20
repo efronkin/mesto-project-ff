@@ -24,54 +24,52 @@ closePopupButton.forEach(closeButton => {
 
 // @todo: Темплейт карточки
 
-function addCard(cardTitleValue, cardImageLinkValue) {
+function createCard(cardTitleValue, cardImageLinkValue) {
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-
+  const deleteButton = cardElement.querySelector('.card__delete-button');
+  const likeButton = cardElement.querySelector('.card__like-button');
+  
   cardElement.querySelector('.card__image').src = cardImageLinkValue;
   cardElement.querySelector('.card__image').alt = 'test-text';
   cardElement.querySelector('.card__title').textContent = cardTitleValue;
 
-  renderCard(cardElement);
+  deleteButton.addEventListener("click", () => deleteCard(cardElement));
 
-  deleteCard(cardElement);
+  //likeCard(cardElement);
+  likeButton.addEventListener("click", () => likeCard(likeButton));
 
-  likeCard(cardElement);
+  return cardElement;
 }
 
 // @todo: DOM узлы
 
 // @todo: Функция создания карточки
-//createButton.addEventListener('click', function () {
+initialCards.forEach((newCard) => {
+  const cardElement = createCard(newCard.name, newCard.link);
+  placesList.append(cardElement);
+});
+
+/*createButton.addEventListener('click', function () {
 addButton.addEventListener('click', function () {
 
   //взятие значений из полей, пригодится потом
-  //const cardTitle = document.querySelector('.popup__input_type_card-name');
-  //const cardImageLink = document.querySelector('.popup__input_type_url');
+  const cardTitle = document.querySelector('.popup__input_type_card-name');
+  const cardImageLink = document.querySelector('.popup__input_type_url');
 
-  //addCard(cardTitle, cardImageLink);
+  createCard(cardTitle, cardImageLink);
 
-  initialCards.forEach(newCard => {
-    const cardTitle = newCard.name;
-    const cardImageLink = newCard.link;
-
-    addCard(cardTitle, cardImageLink);
-  });
-
-  //closePopup(createButton);
-});
+  closePopup(createButton);
+});*/
 
 // @todo: Функция удаления карточки
 function deleteCard(targetCard) {
-  targetCard.querySelector('.card__delete-button').addEventListener('click', () => targetCard.remove());
-}
+  targetCard.remove();
+};
 
 // функция лайка карточки
-function likeCard(targetCard) {
-  targetCard.querySelector('.card__like-button').addEventListener('click', (likeButton) => likeButton.target.classList.toggle('card__like-button_is-active'));
-}
+function likeCard(targetLikeButton) {
+  targetLikeButton.classList.toggle('card__like-button_is-active');
+};
 
 // @todo: Вывести карточки на страницу
-function renderCard(newCard) {
-  placesList.append(newCard);
-}
