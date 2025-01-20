@@ -1,5 +1,5 @@
 const container = document.querySelector('.content')
-const card = container.querySelector('.places__list');
+const placesList = container.querySelector('.places__list');
 const addButton = container.querySelector('.profile__add-button');
 //const newCardPopup = document.querySelector('.popup_type_new-card');
 //const createButton = newCardPopup.querySelector('.popup__button');
@@ -73,5 +73,5 @@ function likeCard(targetCard) {
 
 // @todo: Вывести карточки на страницу
 function renderCard(newCard) {
-  card.append(newCard);
+  placesList.append(newCard);
 }
