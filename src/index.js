@@ -3,7 +3,7 @@ import './cards.js';
 
 import initialCards from './cards.js';
 import {deleteCard, likeCard, createCard} from './components/card.js';
-import {openPopup, closePopup, colsePopupListener} from './components/modal.js';
+import {openPopup, closePopup, addClosePopupListeners} from './components/modal.js';
 
 const container = document.querySelector('.content')
 const placesList = container.querySelector('.places__list');
@@ -23,7 +23,7 @@ const jobInput = editProfileForm.querySelector('.popup__input_type_description')
 //функция открытия картинки(нужна, чтобы без ифов получить данные)
 
 const openImagePopup = (evt) => {
-  getImageDate(evt);
+  fillImagePopupData(evt);
   openPopup(imagePopup);
 }
 
@@ -47,7 +47,7 @@ editProfileButton.addEventListener('click', () => {
 
 //функция получения данных по выбранной картинке
 
-const getImageDate = (evt) => {
+const fillImagePopupData = (evt) => {
   const targetImage = evt.currentTarget;
 
   imagePopupLink.src = targetImage.src;
@@ -58,14 +58,13 @@ const getImageDate = (evt) => {
 //вызов слушателя закрытия для всех поп-апов
 
 popups.forEach((popup) => {
-  colsePopupListener(popup);
+  addClosePopupListeners(popup);
 });
 
-// Создание карточек из файла 
+// Создание карточек из файла
 
 initialCards.forEach((newCard) => {
-  const cardData = {name: newCard.name, link: newCard.link}
-  const cardElement = createCard(cardData, cardFunctions);
+  const cardElement = createCard(newCard, cardFunctions);
   placesList.append(cardElement);
 });
 
@@ -79,8 +78,7 @@ const addCardFormSubmit = (evt) => {
   
   placesList.prepend(createCard(cardData, cardFunctions));
 
-  const popup = document.querySelector(".popup_is-opened");
-  closePopup(popup);
+  closePopup(newCardPopup);
   addCardForm.reset();
 };
 
@@ -95,8 +93,7 @@ const editProfileFormSubmit = (evt) => {
   container.querySelector('.profile__title').textContent = nameInput.value;
   container.querySelector('.profile__description').textContent = jobInput.value;
 
-  const popup = document.querySelector(".popup_is-opened");
-  closePopup(popup);
+  closePopup(editProfilePopup);
 };
 
 editProfileForm.addEventListener('submit', editProfileFormSubmit); 

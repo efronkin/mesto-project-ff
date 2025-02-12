@@ -21,7 +21,7 @@ export const closePopup = (openedPopup) => {
 
 //функциия слушателя закрытия поп-апа
 
-export const colsePopupListener = (popup) => {
+export const addClosePopupListeners = (popup) => {
   const cross = popup.querySelector('.popup__close');
   cross.addEventListener('click', () => closePopup(popup));
 
