@@ -23,9 +23,7 @@ export const getCardsData = () => {
   return fetch(`${config.baseUrl}/cards`, {
     method: "GET",
     headers: config.headers,
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+  }).then(checkResponse);
 };
 
 //получение информации о юзере
@@ -33,9 +31,7 @@ export const getUserData = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "GET",
     headers: config.headers,
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+  }).then(checkResponse);
 };
 
 //редактирование профиля
@@ -45,11 +41,9 @@ export const editProfile = (name, about) => {
     headers: config.headers,
     body: JSON.stringify({
       name,
-      about
+      about,
     }),
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+  }).then(checkResponse);
 };
 
 //отправка новых карточек на сервер
@@ -59,11 +53,9 @@ export const postNewCards = (name, link) => {
     headers: config.headers,
     body: JSON.stringify({
       name,
-      link
+      link,
     }),
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+  }).then(checkResponse);
 };
 
 //запрос на удаление карточки
@@ -71,9 +63,7 @@ export const deleteCardRequest = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+  }).then(checkResponse);
 };
 
 //Поставить лайк
@@ -82,8 +72,7 @@ export const putLike = (cardId) => {
     method: "PUT",
     headers: config.headers,
   })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+    .then(checkResponse);
 };
 
 //удалить лайк
@@ -92,8 +81,7 @@ export const deleteLike = (cardId) => {
     method: "DELETE",
     headers: config.headers,
   })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+    .then(checkResponse);
 };
 
 //смена аватара
@@ -102,29 +90,24 @@ export const editAvatar = (link) => {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
-      avatar: link
+      avatar: link,
     }),
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error));
+  }).then(checkResponse);
 };
 
 // Проверка на наличие картинки по урлу
 export const isValidImageUrl = (url) => {
-  return fetch(url, { method: 'HEAD' })
-    .then((res) => {
-      if (res.ok) {
-        const contentType = res.headers.get('Content-Type');
-        if (!contentType || !contentType.startsWith('image/')) {
-          throw new Error(`Некорректный MIME-тип: ${contentType}`);
-        }
-        return true;
-      } else {
-        console.log(`Ошибка при проверке URL: ${res.status} ${res.statusText}`)
+  return fetch(url, {
+    method: "HEAD",
+  }).then((res) => {
+    if (res.ok) {
+      const contentType = res.headers.get("Content-Type");
+      if (!contentType || !contentType.startsWith("image/")) {
+        throw new Error(`Некорректный MIME-тип: ${contentType}`);
       }
-    })
-    .catch((error) => {
-      console.log(error.message);
-      return false;
-    });
-}
+      return true;
+    } else {
+      console.log(`Ошибка при проверке URL: ${res.status} ${res.statusText}`);
+    }
+  });
+};

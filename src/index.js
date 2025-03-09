@@ -1,7 +1,5 @@
 import "../pages/index.css";
-import "./cards.js";
 
-//import initialCards from './cards.js';
 import { likeCard, createCard } from "./components/card.js";
 import {
   openPopup,
@@ -18,16 +16,16 @@ import {
   putLike,
   deleteLike,
   editAvatar,
-  isValidImageUrl
+  isValidImageUrl,
 } from "./components/api.js";
 
 const validationSettings = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'form__submit_inactive',
-  inputErrorClass: 'form__input_type_error',
-  errorClass: 'form__input-error_active'
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "form__submit_inactive",
+  inputErrorClass: "form__input_type_error",
+  errorClass: "form__input-error_active",
 };
 
 const container = document.querySelector(".content");
@@ -43,7 +41,8 @@ const editProfilePopup = document.querySelector(".popup_type_edit");
 const editAvatarPopup = document.querySelector(".popup_type_update-avatar");
 const deleteCardPopup = document.querySelector(".popup_type_delete-card");
 const deleteCardSubmitButton = deleteCardPopup.querySelector(".popup__button");
-const deleteCardErrorField = deleteCardPopup.querySelector(".delete-card-error");
+const deleteCardErrorField =
+  deleteCardPopup.querySelector(".delete-card-error");
 
 const imagePopup = document.querySelector(".popup_type_image");
 const imagePopupLink = imagePopup.querySelector(".popup__image");
@@ -52,21 +51,30 @@ const popups = document.querySelectorAll(".popup");
 
 const editProfileForm = document.forms["edit-profile"];
 const nameInput = editProfileForm.querySelector(".popup__input_type_name");
-const jobInput = editProfileForm.querySelector(".popup__input_type_description");
+const jobInput = editProfileForm.querySelector(
+  ".popup__input_type_description"
+);
 const editProfileSubmitButton = editProfileForm.querySelector(".popup__button");
 
 const deleteCardForm = document.forms["delete-card"];
 const addCardForm = document.forms["new-place"];
 const updateAvatarForm = document.forms["update-avatar"];
 
-const cardTitleInput = addCardForm.querySelector(".popup__input_type_card-name");
+const cardTitleInput = addCardForm.querySelector(
+  ".popup__input_type_card-name"
+);
 const cardLinkInput = addCardForm.querySelector(".popup__input_type_url");
-const cardLinkInputError = addCardForm.querySelector(".url-input-error")
+const cardLinkInputError = addCardForm.querySelector(".url-input-error");
 const addCardSubmitButton = addCardForm.querySelector(".popup__button");
 
-const avatarLinkInput = editAvatarPopup.querySelector(".popup__input_type_avatar_url");
-const avatarLinkErrorField = editAvatarPopup.querySelector(".url-input-avatar-error");
-const updateAvatarSubmitButton = editAvatarPopup.querySelector(".popup__button");
+const avatarLinkInput = editAvatarPopup.querySelector(
+  ".popup__input_type_avatar_url"
+);
+const avatarLinkErrorField = editAvatarPopup.querySelector(
+  ".url-input-avatar-error"
+);
+const updateAvatarSubmitButton =
+  editAvatarPopup.querySelector(".popup__button");
 
 let userId;
 
@@ -92,33 +100,42 @@ const openDeletePopup = (cardId, targetCard) => {
 const deleteCardFormSubmit = (evt) => {
   evt.preventDefault();
 
-  deleteCardSubmitButton.textContent = 'Удаление...';
+  deleteCardSubmitButton.textContent = "Удаление...";
   deleteCardSubmitButton.disabled = true;
 
   deleteCardRequest(cardToDelete.cardId)
     .then((res) => {
       if (!res) {
-        deleteCardErrorField.textContent = 'Не удалось удалить карточку. Попробуйте позже';
+        deleteCardErrorField.textContent =
+          "Не удалось удалить карточку. Попробуйте позже";
         return;
       }
       cardToDelete.targetCard.remove();
       closePopup(deleteCardPopup);
     })
     .catch((res) => {
-      console.log(`Не удалось удалить карточку. Ошибка: ${res.status} ${res.statusText}`);
+      console.log(
+        `Не удалось удалить карточку. Ошибка: ${res.status} ${res.statusText}`
+      );
     })
     .finally(() => {
-        deleteCardSubmitButton.textContent = 'Да';
-        deleteCardSubmitButton.disabled = false;
-    })
+      deleteCardSubmitButton.textContent = "Да";
+      deleteCardSubmitButton.disabled = false;
+    });
 };
 
 const cardFunctions = {
   delete: openDeletePopup,
-  like: likeCard,
+  like: (likeCounter, targetLikeButton, userId, cardData) =>
+    likeCard(
+      likeCounter,
+      targetLikeButton,
+      userId,
+      cardData,
+      putLike,
+      deleteLike
+    ),
   openImage: openImagePopup,
-  putLike,
-  deleteLike
 };
 
 //добавления слушателя сабмита на форму удаления
@@ -173,17 +190,9 @@ const appendCards = (cardsList) => {
   cardsList.forEach((newCard) => {
     const cardElement = createCard(userId, newCard, cardFunctions);
     const deleteButton = cardElement.querySelector(".card__delete-button");
-    
+
     placesList.append(cardElement);
-
-    hideDeleteButton(newCard.owner._id, userId, deleteButton);
   });
-};
-
-const hideDeleteButton = (cardOwnerId, currentUserId, deleteButton) => {
-  if (cardOwnerId !== currentUserId) {
-    deleteButton.style.display = "none";
-  }
 };
 
 // добавление новой карточки
@@ -191,13 +200,14 @@ const hideDeleteButton = (cardOwnerId, currentUserId, deleteButton) => {
 const addCardFormSubmit = (evt) => {
   evt.preventDefault();
 
-  addCardSubmitButton.textContent = 'Сохраненение...';
+  addCardSubmitButton.textContent = "Сохранение...";
   addCardSubmitButton.disabled = true;
 
   isValidImageUrl(cardLinkInput.value)
     .then((res) => {
       if (!res) {
-        cardLinkInputError.textContent = 'По указанному адресу изображение не найдена. Пожалуйста, проверьте правильно ли указана ссылка';
+        cardLinkInputError.textContent =
+          "По указанному адресу изображение не найдена. Пожалуйста, проверьте правильно ли указана ссылка";
         return;
       }
 
@@ -209,11 +219,15 @@ const addCardFormSubmit = (evt) => {
 
       closePopup(newCardPopup);
       addCardForm.reset();
-  })
-  .finally(() => {
-    addCardSubmitButton.textContent = 'Сохранить';
-    addCardSubmitButton.disabled = false;
-  })
+    })
+    .catch((error) => {
+      console.log(error.message);
+      return false;
+    })
+    .finally(() => {
+      addCardSubmitButton.textContent = "Сохранить";
+      addCardSubmitButton.disabled = false;
+    });
 };
 
 // добавление слушателя сабмита на форму создания карточки
@@ -225,13 +239,14 @@ addCardForm.addEventListener("submit", addCardFormSubmit);
 const updateAvatarFormSubmit = (evt) => {
   evt.preventDefault();
 
-  updateAvatarSubmitButton.textContent = 'Сохраненение...';
+  updateAvatarSubmitButton.textContent = "Сохранение...";
   updateAvatarSubmitButton.disabled = true;
 
   isValidImageUrl(avatarLinkInput.value)
     .then((res) => {
       if (!res) {
-        avatarLinkErrorField.textContent = 'По указанному адресу изображение не найдена. Пожалуйста, проверьте правильно ли указана ссылка';
+        avatarLinkErrorField.textContent =
+          "По указанному адресу изображение не найдена. Пожалуйста, проверьте правильно ли указана ссылка";
         return;
       }
 
@@ -245,9 +260,9 @@ const updateAvatarFormSubmit = (evt) => {
       updateAvatarForm.reset();
     })
     .finally(() => {
-      updateAvatarSubmitButton.textContent = 'Сохранить';
+      updateAvatarSubmitButton.textContent = "Сохранить";
       updateAvatarSubmitButton.disabled = false;
-    })
+    });
 };
 
 // добавление слушателя сабмита на форму обновления аватара
@@ -259,7 +274,7 @@ updateAvatarForm.addEventListener("submit", updateAvatarFormSubmit);
 const editProfileFormSubmit = (evt) => {
   evt.preventDefault();
 
-  editProfileSubmitButton.textContent = 'Сохраненение...';
+  editProfileSubmitButton.textContent = "Сохранение...";
   editProfileSubmitButton.disabled = true;
 
   editProfile(nameInput.value, jobInput.value)
@@ -270,9 +285,9 @@ const editProfileFormSubmit = (evt) => {
     })
     .catch((errorStatus) => console.log(errorStatus))
     .finally(() => {
-      editProfileSubmitButton.textContent = 'Сохранить';
+      editProfileSubmitButton.textContent = "Сохранить";
       editProfileSubmitButton.disabled = false;
-    })
+    });
 };
 
 editProfileForm.addEventListener("submit", editProfileFormSubmit);
@@ -281,15 +296,18 @@ editProfileForm.addEventListener("submit", editProfileFormSubmit);
 enableValidation(validationSettings);
 
 //получаем карточки и данные по юзеру
-Promise.all([getUserData(), getCardsData()]).then(([userData, cardsData]) => {
-  profileImage.style.backgroundImage = `url(${userData.avatar})`;
-  userId = userData._id;
-  profileName.textContent = userData.name;
-  profileDescription.textContent = userData.about;
-  appendCards(cardsData);
-  
-}).catch(res => {
-  profileName.textContent = ''
-  profileDescription.textContent = 'Не удалось загрузить данные.'
-  console.log(`Не удалось загрузить данные. Ошибка: ${res.status} ${res.statusText}`)
-})
+Promise.all([getUserData(), getCardsData()])
+  .then(([userData, cardsData]) => {
+    profileImage.style.backgroundImage = `url(${userData.avatar})`;
+    userId = userData._id;
+    profileName.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    appendCards(cardsData);
+  })
+  .catch((res) => {
+    profileName.textContent = "";
+    profileDescription.textContent = "Не удалось загрузить данные.";
+    console.log(
+      `Не удалось загрузить данные. Ошибка: ${res.status} ${res.statusText}`
+    );
+  });
